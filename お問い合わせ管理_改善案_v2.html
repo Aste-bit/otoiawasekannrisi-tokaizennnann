@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お問い合わせ管理シート 改善案 v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --border: #dfe1e6;
+    --text: #1a1a2e;
+    --text-sub: #6b7280;
+    --accent: #2563eb;
+    --red: #ef4444;
+    --orange: #f59e0b;
+    --yellow: #eab308;
+    --green: #22c55e;
+    --gray: #9ca3af;
+    --frozen-bg: #f8f9fc;
+    --hover: #f1f5f9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 24px;
+  }
+
+  .page-header {
+    max-width: 1400px;
+    margin: 0 auto 32px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .page-header .subtitle {
+    font-size: 14px;
+    color: var(--text-sub);
+  }
+
+  .page-header .version {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 10px;
+    background: #dbeafe;
+    color: var(--accent);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Section */
+  .section {
+    max-width: 1400px;
+    margin: 40px auto 16px;
+  }
+
+  .section h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .section p {
+    font-size: 13px;
+    color: var(--text-sub);
+  }
+
+  .divider {
+    max-width: 1400px;
+    margin: 48px auto;
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ===== KEY INSIGHT CALLOUT ===== */
+  .insight-box {
+    max-width: 1400px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+    border: 1px solid #c7d2fe;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+  }
+
+  .insight-box h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .insight-box p {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.7;
+  }
+
+  .insight-box .highlight {
+    background: #fef3c7;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  /* ===== STATUS REDESIGN COMPARISON ===== */
+  .status-comparison {
+    max-width: 1400px;
+    margin: 24px auto;
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    gap: 0;
+    align-items: start;
+  }
+
+  .status-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .status-card.old {
+    opacity: 0.7;
+  }
+
+  .status-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .status-card.new h4 {
+    color: var(--accent);
+  }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .status-row:last-child { border-bottom: none; }
+
+  .status-row .status-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-row .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .status-row .name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .status-row .desc {
+    font-size: 11px;
+    color: var(--text-sub);
+    text-align: right;
+    max-width: 200px;
+  }
+
+  .arrow-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--accent);
+    padding-top: 40px;
+  }
+
+  /* ===== ROLE MATRIX ===== */
+  .role-matrix {
+    max-width: 1400px;
+    margin: 24px auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .role-matrix table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .role-matrix thead th {
+    background: #f8fafc;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-sub);
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .role-matrix tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #f1f3f5;
+    vertical-align: middle;
+  }
+
+  .role-matrix tbody tr:hover td {
+    background: var(--hover);
+  }
+
+  .check-yes {
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .check-no {
+    color: #d1d5db;
+  }
+
+  /* ===== SHEET TABS ===== */
+  .tabs {
+    max-width: 1400px;
+    margin: 0 auto 0;
+    display: flex;
+    gap: 2px;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 8px 8px 0 0;
+    cursor: default;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-sub);
+  }
+
+  .tab.active {
+    background: var(--card);
+    color: var(--accent);
+    border-color: var(--border);
+    border-bottom-color: var(--card);
+    font-weight: 600;
+  }
+
+  .tab .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 6px;
+  }
+
+  .tab.active .badge { background: #dbeafe; color: var(--accent); }
+  .tab:not(.active) .badge { background: #f1f1f1; color: var(--text-sub); }
+
+  /* ===== MAIN TABLE ===== */
+  .sheet-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0 8px 8px 8px;
+    overflow: hidden;
+  }
+
+  .sheet-wrapper {
+    overflow-x: auto;
+  }
+
+  .main-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 1150px;
+  }
+
+  .main-table thead th {
+    background: #f8fafc;
+    border-bottom: 2px solid var(--border);
+    padding: 10px 12px;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text-sub);
+    text-align: left;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    letter-spacing: 0.02em;
+  }
+
+  .main-table thead th.frozen {
+    background: #eef2ff;
+    color: var(--accent);
+  }
+
+  .main-table thead th .th-sub {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    color: #a0aec0;
+    margin-top: 2px;
+  }
+
+  .main-table thead th.phase-label {
+    background: transparent;
+    border-bottom: none;
+    padding: 4px 12px 2px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .main-table thead th.phase-label.phase-judge { color: var(--accent); }
+  .main-table thead th.phase-label.phase-write { color: #059669; }
+  .main-table thead th.phase-label.phase-ref { color: var(--text-sub); }
+
+  .main-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f3f5;
+    vertical-align: middle;
+  }
+
+  .main-table tbody tr:hover td { background: var(--hover); }
+  .main-table tbody tr:hover td.frozen-cell { background: #eef2ff; }
+
+  td.frozen-cell { background: var(--frozen-bg); }
+
+  .freeze-line { border-right: 2px solid var(--accent) !important; }
+
+  /* ===== STATUS BADGES ===== */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .status-untouched { background: #fef2f2; color: #991b1b; }
+  .status-untouched .status-dot { background: var(--red); }
+
+  .status-active { background: #fefce8; color: #854d0e; }
+  .status-active .status-dot { background: var(--yellow); }
+
+  .status-hold { background: #f3f4f6; color: #4b5563; }
+  .status-hold .status-dot { background: var(--gray); }
+
+  .status-done { background: #f0fdf4; color: #166534; }
+  .status-done .status-dot { background: var(--green); }
+
+  /* ===== TYPE BADGES ===== */
+  .type-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .type-kouben { background: #dbeafe; color: #1e40af; }
+  .type-bengoshi { background: #fae8ff; color: #7e22ce; }
+  .type-saiban { background: #fee2e2; color: #991b1b; }
+  .type-shohi { background: #d1fae5; color: #065f46; }
+
+  /* ===== PERSON TAGS ===== */
+  .person-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    background: #f1f5f9;
+    color: var(--text);
+  }
+
+  .person-tag.me {
+    background: #fef3c7;
+    color: #92400e;
+    font-weight: 600;
+  }
+
+  .person-empty {
+    color: #d1d5db;
+    font-size: 12px;
+  }
+
+  /* ===== OTHER CELLS ===== */
+  .check-done-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--green);
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+  .check-none-cell { color: var(--text-sub); font-size: 12px; }
+
+  .thread-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+
+  .thread-link:hover { background: #dbeafe; }
+
+  .thread-link svg { width: 14px; height: 14px; }
+
+  .thread-link.dimmed { opacity: 0.35; }
+
+  .hold-reason {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+
+  .memo-text {
+    font-size: 12px;
+    color: #4b5563;
+    max-width: 280px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .date-cell {
+    font-size: 12px;
+    color: var(--text-sub);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .date-stale { color: var(--red); font-weight: 500; }
+
+  /* ===== LEGEND ===== */
+  .legend {
+    max-width: 1400px;
+    margin: 24px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .legend-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .legend-group-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .legend-items { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* ===== FREEZE ANNOTATION ===== */
+  .freeze-annotation {
+    max-width: 1400px;
+    margin: 8px auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--accent);
+    padding-left: 4px;
+  }
+
+  .freeze-annotation::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+
+  /* ===== WORKFLOW FLOW ===== */
+  .flow-container {
+    max-width: 1400px;
+    margin: 24px auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+
+  .flow-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    min-width: 150px;
+    text-align: center;
+  }
+
+  .flow-step .step-num {
+    width: 24px;
+    height: 24px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .flow-step .step-label { font-size: 12px; font-weight: 600; color: var(--text); }
+  .flow-step .step-cols { font-size: 10px; color: var(--text-sub); }
+
+  .flow-arrow { font-size: 20px; color: var(--accent); padding: 0 8px; flex-shrink: 0; }
+
+  /* ===== SHEET STRUCTURE ===== */
+  .sheet-structure {
+    max-width: 1400px;
+    margin: 24px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .sheet-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .sheet-card.primary {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .sheet-card .sheet-icon { font-size: 28px; margin-bottom: 8px; }
+  .sheet-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .sheet-card p { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
+
+  .sheet-card .filter-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    background: #f1f5f9;
+    color: var(--text-sub);
+  }
+
+  /* ===== INFO CARDS ===== */
+  .info-grid {
+    max-width: 1400px;
+    margin: 24px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .info-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .info-card h3 .icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .info-card ul { list-style: none; padding: 0; }
+
+  .info-card li {
+    padding: 6px 0;
+    font-size: 13px;
+    color: #4b5563;
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .info-card li:last-child { border-bottom: none; }
+
+  .info-card li::before {
+    content: '→';
+    color: var(--accent);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* ===== COLUMN COMPARISON ===== */
+  .comparison {
+    max-width: 1400px;
+    margin: 24px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .comparison-col {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .comparison-col h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+
+  .col-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .col-item:last-child { border-bottom: none; }
+  .col-item .label { color: #4b5563; }
+
+  .col-badge {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .col-remove { background: #fef2f2; color: #991b1b; }
+  .col-keep { background: #f0fdf4; color: #166534; }
+  .col-new { background: #dbeafe; color: #1e40af; }
+
+  /* ===== SCENARIO EXAMPLES ===== */
+  .scenario {
+    max-width: 1400px;
+    margin: 16px auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+
+  .scenario-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .scenario-persona {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 12px;
+  }
+
+  .scenario-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: #4b5563;
+  }
+
+  .scenario-step {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: #f8fafc;
+    border-radius: 4px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .scenario-step .s-num {
+    font-weight: 700;
+    color: var(--accent);
+    margin-right: 2px;
+  }
+
+  .scenario-step-arrow {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 12px; }
+    .comparison { grid-template-columns: 1fr; }
+    .sheet-structure { grid-template-columns: 1fr; }
+    .flow-steps { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .status-comparison { grid-template-columns: 1fr; }
+    .arrow-col { transform: rotate(90deg); padding: 8px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>📋 お問い合わせ管理シート 改善案</h1>
+  <p class="subtitle">目的：このシートを見るだけで「Discordスレッドを確認すべきか」を即判断できるようにする</p>
+  <span class="version">v2 — ステータス設計見直し・対応期限削除・自動連動不要</span>
+</div>
+
+<!-- ===== CORE INSIGHT ===== -->
+<div class="insight-box">
+  <h3>💡 v1 → v2 の最大の変更点：ステータスの役割を分離</h3>
+  <p>
+    v1では「確認待ち」と「対応中」が曖昧になる問題がありました。原因は<span class="highlight">ステータスに「誰が見るべきか」の意味まで持たせていた</span>ことです。<br><br>
+    v2では<span class="highlight">ステータス＝案件の状態</span>（対応中か保留か）、<span class="highlight">確認依頼先＝次に見る人</span>と明確に分離しました。<br>
+    「自分がスレッドを見るべきか？」は<strong>確認依頼先に自分の名前があるかどうか</strong>で判断します。ステータスは案件の温度感を把握するためだけに使います。
+  </p>
+</div>
+
+<!-- ===== STATUS REDESIGN ===== -->
+<div class="section">
+  <h2>🔄 ステータス設計の変更</h2>
+  <p>5段階 → 4段階に簡素化。「確認待ち」を廃止し、その役割は「確認依頼先」列に委ねる</p>
+</div>
+
+<div class="status-comparison">
+  <div class="status-card old">
+    <h4>❌ v1（5段階・曖昧あり）</h4>
+    <div class="status-row">
+      <div class="status-label"><span class="dot" style="background:var(--red)"></span><span class="name">未対応</span></div>
+      <span class="desc">誰も着手していない</span>
+    </div>
+    <div class="status-row">
+      <div class="status-label"><span class="dot" style="background:var(--yellow)"></span><span class="name">対応中</span></div>
+      <span class="desc">担当者が対応中</span>
+    </div>
+    <div class="status-row" style="background:#fff7ed; border-radius:4px; padding:8px; margin:2px 0;">
+      <div class="status-label"><span class="dot" style="background:var(--orange)"></span><span class="name">確認待ち 🤔</span></div>
+      <span class="desc" style="color:var(--red);">対応中と区別つかない</span>
+    </div>
+    <div class="status-row">
+      <div class="status-label"><span class="dot" style="background:var(--gray)"></span><span class="name">保留中</span></div>
+      <span class="desc">外部待ち</span>
+    </div>
+    <div class="status-row">
+      <div class="status-label"><span class="dot" style="background:var(--green)"></span><span class="name">完了</span></div>
+      <span class="desc">別シートへ移動</span>
+    </div>
+  </div>
+
+  <div class="arrow-col">→</div>
+
+  <div class="status-card new">
+    <h4>✅ v2（4段階・シンプル）</h4>
+    <div class="status-row">
+      <div class="status-label"><span class="dot" style="background:var(--red)"></span><span class="name">未対応</span></div>
+      <span class="desc">誰も着手していない</span>
+    </div>
+    <div class="status-row">
+      <div class="status-label"><span class="dot" style="background:var(--yellow)"></span><span class="name">対応中</span></div>
+      <span class="desc">社内の誰かがボールを持っている</span>
+    </div>
+    <div class="status-row">
+      <div class="status-label"><span class="dot" style="background:var(--gray)"></span><span class="name">保留中</span></div>
+      <span class="desc">外部待ちで社内アクション不要</span>
+    </div>
+    <div class="status-row">
+      <div class="status-label"><span class="dot" style="background:var(--green)"></span><span class="name">完了</span></div>
+      <span class="desc">→ 完了済みシートへ自動移動</span>
+    </div>
+    <div style="margin-top:12px; padding:10px; background:#f0f9ff; border-radius:6px; font-size:12px; color:#1e40af;">
+      <strong>「誰が見るべきか」は確認依頼先で判断</strong><br>
+      ステータスには案件状態だけを持たせる
+    </div>
+  </div>
+</div>
+
+<!-- ===== JUDGMENT MATRIX ===== -->
+<div class="section">
+  <h2>📊 「スレッドを見るべきか？」の判断マトリクス</h2>
+  <p>ステータス × 自分の役割で判断する。これがこのシートの本質的な使い方</p>
+</div>
+
+<div class="role-matrix">
+  <table>
+    <thead>
+      <tr>
+        <th>ステータス</th>
+        <th>自分が「対応担当者」</th>
+        <th>自分が「確認依頼先」</th>
+        <th>どちらでもない</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="status status-untouched"><span class="status-dot"></span>未対応</span></td>
+        <td><span class="check-yes">✅ 対応着手する</span></td>
+        <td><span class="check-yes">✅ スレッド確認する</span></td>
+        <td><span class="check-no">— スキップ</span></td>
+      </tr>
+      <tr>
+        <td><span class="status status-active"><span class="status-dot"></span>対応中</span></td>
+        <td><span class="check-yes">✅ 自分の対応を進める</span></td>
+        <td><span class="check-yes">✅ スレッド確認する</span></td>
+        <td><span class="check-no">— スキップ</span></td>
+      </tr>
+      <tr>
+        <td><span class="status status-hold"><span class="status-dot"></span>保留中</span></td>
+        <td><span class="check-no">— 外部待ち（保留理由確認）</span></td>
+        <td><span class="check-no">— 外部待ち</span></td>
+        <td><span class="check-no">— スキップ</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== USAGE SCENARIO ===== -->
+<div class="section">
+  <h2>🎬 利用シナリオ例</h2>
+</div>
+
+<div class="scenario">
+  <div class="scenario-header">
+    <span class="scenario-persona">五十嵐さん</span>
+    朝イチでシートを開いた場合
+  </div>
+  <div class="scenario-steps">
+    <div class="scenario-step"><span class="s-num">1</span>確認依頼先に「五十嵐」がある行を探す</div>
+    <span class="scenario-step-arrow">→</span>
+    <div class="scenario-step"><span class="s-num">2</span>ステータスが対応中 / 未対応なら「開く」をクリック</div>
+    <span class="scenario-step-arrow">→</span>
+    <div class="scenario-step"><span class="s-num">3</span>Discordスレッドで対応内容を確認</div>
+    <span class="scenario-step-arrow">→</span>
+    <div class="scenario-step"><span class="s-num">4</span>シートに戻って担当者・メモ・更新日を記入</div>
+  </div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-header">
+    <span class="scenario-persona">台さん</span>
+    裁判案件の進捗を確認したい場合
+  </div>
+  <div class="scenario-steps">
+    <div class="scenario-step"><span class="s-num">1</span>種別「裁判」でフィルタ</div>
+    <span class="scenario-step-arrow">→</span>
+    <div class="scenario-step"><span class="s-num">2</span>保留中の案件 → 保留理由を確認（法律事務所確認中？）</div>
+    <span class="scenario-step-arrow">→</span>
+    <div class="scenario-step"><span class="s-num">3</span>スレッドに飛ぶ必要なし → 次の案件へ</div>
+  </div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-header">
+    <span class="scenario-persona">大慈さん</span>
+    部署統括として全体を俯瞰したい場合
+  </div>
+  <div class="scenario-steps">
+    <div class="scenario-step"><span class="s-num">1</span>未対応の行がないか確認（放置案件の発見）</div>
+    <span class="scenario-step-arrow">→</span>
+    <div class="scenario-step"><span class="s-num">2</span>最終更新日が古い行（赤字）を確認（滞留案件の発見）</div>
+    <span class="scenario-step-arrow">→</span>
+    <div class="scenario-step"><span class="s-num">3</span>確認依頼先に「大慈」があれば、そのスレッドだけ確認</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ===== SHEET PREVIEW ===== -->
+<div class="section">
+  <h2>🖥️ 対応中シート プレビュー（v2）</h2>
+  <p>10項目。左4列固定 → スレッドへ飛ぶ → 戻って右側を記入、の流れ</p>
+</div>
+
+<div class="freeze-annotation">左4列を固定表示（横スクロールしても常に見える）</div>
+
+<div class="tabs">
+  <div class="tab active">対応中<span class="badge">5</span></div>
+  <div class="tab">完了済み<span class="badge">12</span></div>
+  <div class="tab">全体<span class="badge">17</span></div>
+</div>
+
+<div class="sheet-container">
+  <div class="sheet-wrapper">
+    <table class="main-table">
+      <thead>
+        <tr>
+          <!-- Phase labels -->
+          <th class="phase-label phase-judge" colspan="4">← 見て判断する →</th>
+          <th class="phase-label phase-write" colspan="5">← スレッドから戻って記入する →</th>
+          <th class="phase-label phase-ref">参照</th>
+        </tr>
+        <tr>
+          <!-- Frozen: 判断 -->
+          <th class="frozen" style="min-width:90px;">ステータス<span class="th-sub">案件の状態</span></th>
+          <th class="frozen" style="min-width:100px;">種別<span class="th-sub">案件の性質</span></th>
+          <th class="frozen" style="min-width:100px;">氏名<span class="th-sub">お客様名</span></th>
+          <th class="frozen freeze-line" style="min-width:70px;">スレッド<span class="th-sub">Discord ▶</span></th>
+          <!-- Scrollable: 記入 -->
+          <th style="min-width:90px;">対応担当者<span class="th-sub">ボール保持者</span></th>
+          <th style="min-width:90px;">確認依頼先<span class="th-sub">次に見る人</span></th>
+          <th style="min-width:120px;">保留理由<span class="th-sub">保留中の時のみ</span></th>
+          <th style="min-width:65px;">録画<span class="th-sub">チェック</span></th>
+          <th style="min-width:280px;">備考・メモ<span class="th-sub">自由記入</span></th>
+          <!-- Ref -->
+          <th style="min-width:90px;">最終更新日<span class="th-sub">放置チェック用</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Row 1: 未対応 裁判 -->
+        <tr>
+          <td class="frozen-cell"><span class="status status-untouched"><span class="status-dot"></span>未対応</span></td>
+          <td class="frozen-cell"><span class="type-badge type-saiban">裁判</span></td>
+          <td class="frozen-cell" style="font-weight:500;">鈴木 一郎</td>
+          <td class="frozen-cell freeze-line">
+            <a href="#" class="thread-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              開く
+            </a>
+          </td>
+          <td><span class="person-empty">—</span></td>
+          <td><span class="person-tag">台</span></td>
+          <td><span class="person-empty">—</span></td>
+          <td><span class="check-none-cell">未</span></td>
+          <td class="memo-text">書面が本日届きました。台さん至急確認お願いします。</td>
+          <td class="date-cell">—</td>
+        </tr>
+
+        <!-- Row 2: 対応中 抗弁書 -->
+        <tr>
+          <td class="frozen-cell"><span class="status status-active"><span class="status-dot"></span>対応中</span></td>
+          <td class="frozen-cell"><span class="type-badge type-kouben">抗弁書</span></td>
+          <td class="frozen-cell" style="font-weight:500;">山田 太郎</td>
+          <td class="frozen-cell freeze-line">
+            <a href="#" class="thread-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              開く
+            </a>
+          </td>
+          <td><span class="person-tag">井上</span></td>
+          <td><span class="person-tag me">五十嵐</span></td>
+          <td><span class="person-empty">—</span></td>
+          <td><span class="check-none-cell">未</span></td>
+          <td class="memo-text">録画チェック依頼中。五十嵐さん確認お願いします。</td>
+          <td class="date-cell">02/26</td>
+        </tr>
+
+        <!-- Row 3: 対応中 抗弁書 -->
+        <tr>
+          <td class="frozen-cell"><span class="status status-active"><span class="status-dot"></span>対応中</span></td>
+          <td class="frozen-cell"><span class="type-badge type-kouben">抗弁書</span></td>
+          <td class="frozen-cell" style="font-weight:500;">佐藤 花子</td>
+          <td class="frozen-cell freeze-line">
+            <a href="#" class="thread-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              開く
+            </a>
+          </td>
+          <td><span class="person-tag">五十嵐</span></td>
+          <td><span class="person-tag me">大慈</span></td>
+          <td><span class="person-empty">—</span></td>
+          <td><span class="check-done-cell">✓ 済</span></td>
+          <td class="memo-text">録画チェック完了。大慈さんに最終判断を依頼。</td>
+          <td class="date-cell">02/27</td>
+        </tr>
+
+        <!-- Row 4: 保留中 裁判 -->
+        <tr>
+          <td class="frozen-cell"><span class="status status-hold"><span class="status-dot"></span>保留中</span></td>
+          <td class="frozen-cell"><span class="type-badge type-saiban">裁判</span></td>
+          <td class="frozen-cell" style="font-weight:500;">田中 次郎</td>
+          <td class="frozen-cell freeze-line">
+            <a href="#" class="thread-link dimmed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              開く
+            </a>
+          </td>
+          <td><span class="person-tag">台</span></td>
+          <td><span class="person-empty">—</span></td>
+          <td><span class="hold-reason">法律事務所 確認中</span></td>
+          <td><span class="check-done-cell">✓ 済</span></td>
+          <td class="memo-text">弁護士事務所からの回答待ち。3/5目処。</td>
+          <td class="date-cell">02/24</td>
+        </tr>
+
+        <!-- Row 5: 対応中 弁護士 -->
+        <tr>
+          <td class="frozen-cell"><span class="status status-active"><span class="status-dot"></span>対応中</span></td>
+          <td class="frozen-cell"><span class="type-badge type-bengoshi">弁護士</span></td>
+          <td class="frozen-cell" style="font-weight:500;">高橋 美咲</td>
+          <td class="frozen-cell freeze-line">
+            <a href="#" class="thread-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              開く
+            </a>
+          </td>
+          <td><span class="person-tag">伊藤</span></td>
+          <td><span class="person-tag">谷口</span></td>
+          <td><span class="person-empty">—</span></td>
+          <td><span class="check-none-cell">未</span></td>
+          <td class="memo-text">弁護士側と電話済み。谷口さんに方針確認中。</td>
+          <td class="date-cell date-stale">02/18</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== LEGEND ===== -->
+<div class="legend">
+  <div class="legend-group">
+    <div class="legend-group-title">ステータス（4段階）</div>
+    <div class="legend-items">
+      <span class="status status-untouched"><span class="status-dot"></span>未対応</span>
+      <span class="status status-active"><span class="status-dot"></span>対応中</span>
+      <span class="status status-hold"><span class="status-dot"></span>保留中</span>
+      <span class="status status-done"><span class="status-dot"></span>完了</span>
+    </div>
+  </div>
+  <div class="legend-group">
+    <div class="legend-group-title">種別</div>
+    <div class="legend-items">
+      <span class="type-badge type-kouben">抗弁書</span>
+      <span class="type-badge type-bengoshi">弁護士</span>
+      <span class="type-badge type-saiban">裁判</span>
+      <span class="type-badge type-shohi">消費者センター</span>
+    </div>
+  </div>
+  <div class="legend-group">
+    <div class="legend-group-title">保留理由（プルダウン）</div>
+    <div class="legend-items">
+      <span class="hold-reason">法律事務所 確認中</span>
+      <span class="hold-reason">書類待ち</span>
+      <span class="hold-reason">お客様連絡待ち</span>
+      <span class="hold-reason">社内確認待ち</span>
+      <span class="hold-reason">その他（備考参照）</span>
+    </div>
+  </div>
+  <div class="legend-group">
+    <div class="legend-group-title">表示ルール</div>
+    <div class="legend-items">
+      <span style="font-size:12px; color:var(--text-sub);">🔴 最終更新日が7日以上前 → <span style="color:var(--red); font-weight:600;">赤字表示</span>（条件付き書式）</span>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ===== 3 SHEET STRUCTURE ===== -->
+<div class="section">
+  <h2>📑 シート構成（3シート）</h2>
+  <p>完了した案件は自動的に「完了済み」シートへ。月10件なら手動で「完了」に変更するだけでOK</p>
+</div>
+
+<div class="sheet-structure">
+  <div class="sheet-card primary">
+    <div class="sheet-icon">👀</div>
+    <h4>対応中シート（メイン）</h4>
+    <p>普段確認するシート。<br>未対応・対応中・保留中のみ表示</p>
+    <div class="filter-tag">ステータス ≠ 完了</div>
+  </div>
+  <div class="sheet-card">
+    <div class="sheet-icon">✅</div>
+    <h4>完了済みシート</h4>
+    <p>対応完了した案件のアーカイブ。<br>振り返り・集計用</p>
+    <div class="filter-tag">ステータス = 完了</div>
+  </div>
+  <div class="sheet-card">
+    <div class="sheet-icon">📊</div>
+    <h4>全体シート（マスタ）</h4>
+    <p>全データの原本。<br>他2シートはここをフィルタで参照</p>
+    <div class="filter-tag">全件</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ===== COLUMN CHANGES ===== -->
+<div class="section">
+  <h2>📝 項目の変更一覧（v7 → 改善案 v2）</h2>
+  <p>21項目 → 10項目。「スレッド確認の判断」に不要な項目をすべて削除</p>
+</div>
+
+<div class="comparison">
+  <div class="comparison-col">
+    <h3 style="color: var(--red);">❌ 削除（11項目）</h3>
+    <div class="col-item"><span class="label">No.</span><span class="col-badge col-remove">不要</span></div>
+    <div class="col-item"><span class="label">LINE名</span><span class="col-badge col-remove">別スプシ</span></div>
+    <div class="col-item"><span class="label">契約日</span><span class="col-badge col-remove">別スプシ</span></div>
+    <div class="col-item"><span class="label">契約プラン</span><span class="col-badge col-remove">別スプシ</span></div>
+    <div class="col-item"><span class="label">決済方法</span><span class="col-badge col-remove">別スプシ</span></div>
+    <div class="col-item"><span class="label">担当営業マン</span><span class="col-badge col-remove">別スプシ</span></div>
+    <div class="col-item"><span class="label">メールアドレス</span><span class="col-badge col-remove">別スプシ</span></div>
+    <div class="col-item"><span class="label">書類有無</span><span class="col-badge col-remove">備考で十分</span></div>
+    <div class="col-item"><span class="label">発覚手段</span><span class="col-badge col-remove">種別で判断可</span></div>
+    <div class="col-item"><span class="label">対応期限</span><span class="col-badge col-remove">全件にないため備考へ</span></div>
+    <div class="col-item"><span class="label">結果</span><span class="col-badge col-remove">完了は別シートへ</span></div>
+  </div>
+  <div class="comparison-col">
+    <h3 style="color: var(--green);">✅ 採用（10項目）</h3>
+    <div class="col-item"><span class="label">ステータス</span><span class="col-badge col-keep">4段階に変更</span></div>
+    <div class="col-item"><span class="label">種別</span><span class="col-badge col-keep">残す</span></div>
+    <div class="col-item"><span class="label">氏名</span><span class="col-badge col-keep">残す</span></div>
+    <div class="col-item"><span class="label">Discordスレッドリンク</span><span class="col-badge col-keep">残す</span></div>
+    <div class="col-item"><span class="label">対応担当者</span><span class="col-badge col-keep">残す</span></div>
+    <div class="col-item"><span class="label">確認依頼先</span><span class="col-badge col-keep">残す</span></div>
+    <div class="col-item"><span class="label">録画チェック</span><span class="col-badge col-keep">残す</span></div>
+    <div class="col-item"><span class="label">備考・メモ</span><span class="col-badge col-keep">残す</span></div>
+    <div class="col-item"><span class="label">最終更新日</span><span class="col-badge col-keep">名称変更</span></div>
+    <div class="col-item"><span class="label"><strong>保留理由</strong></span><span class="col-badge col-new">★ 新設</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ===== DESIGN NOTES ===== -->
+<div class="section">
+  <h2>🔍 設計判断の解説</h2>
+</div>
+
+<div class="info-grid">
+  <div class="info-card">
+    <h3><span class="icon" style="background:#dbeafe;color:#2563eb;">🆕</span>保留理由を新設した理由</h3>
+    <ul>
+      <li>裁判系で「法律事務所に確認中」のようなケースを標準化</li>
+      <li>プルダウン選択式にすることで、記入者によるバラつきを防止</li>
+      <li>ステータスが「保留中」の時のみ使う列なので、記入負担は最小限</li>
+      <li>プルダウンに「その他（備考参照）」を入れ、想定外のケースも対応可能</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h3><span class="icon" style="background:#fef3c7;color:#d97706;">📅</span>最終更新日の運用ルール</h3>
+    <ul>
+      <li>対応中でも都度更新する（最後にこの案件に触った日付）</li>
+      <li>目的は「放置案件」の早期発見（条件付き書式で7日超を赤字表示）</li>
+      <li>対応期限は廃止 → 期限がある場合のみ備考に「期限: 3/10」と記載</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h3><span class="icon" style="background:#ede9fe;color:#7c3aed;">🔗</span>列の配置の設計思想</h3>
+    <ul>
+      <li>左4列（ステータス・種別・氏名・リンク）を固定 → 常に見える</li>
+      <li>スレッドから戻って記入する列（担当者・依頼先・メモ等）を中央に集約</li>
+      <li>備考メモを広めに配置し、書きやすさを重視</li>
+      <li>最終更新日は参照用なので最右端に配置</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h3><span class="icon" style="background:#d1fae5;color:#059669;">📋</span>発覚日を削除した理由</h3>
+    <ul>
+      <li>v1では残していたが、「スレッドを見るべきか」の判断には直接関係しない</li>
+      <li>案件の経過日数は最終更新日で十分把握可能</li>
+      <li>発覚日が必要な場面ではスレッドやDiscordに記録が残っている</li>
+      <li>もし戻したい場合は最終更新日の右に追加すればOK</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h3><span class="icon" style="background:#fce7f3;color:#be185d;">🔄</span>別スプシとの連動について</h3>
+    <ul>
+      <li>月10件であれば自動連動は過剰 → 手動管理で十分</li>
+      <li>完了時は「対応中シートでステータスを完了に変更」→ 自動で完了済みシートへ</li>
+      <li>顧客管理スプシとの同期は、対応完了時に両方を更新する運用ルールで対応</li>
+      <li>案件数が増えてきたら（月30件超〜）自動化を検討</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h3><span class="icon" style="background:#f3f4f6;color:#4b5563;">⚙️</span>スプシの実装メモ</h3>
+    <ul>
+      <li>マスタシートにデータを入力 → 対応中/完了済みはFILTER関数で自動振り分け</li>
+      <li>プルダウン：ステータス4種、種別4種、保留理由5種、担当者7名、録画（未/済）</li>
+      <li>条件付き書式：最終更新日が7日以上前なら赤字</li>
+      <li>スレッドリンクはハイパーリンクとして入力</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>
